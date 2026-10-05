@@ -16,10 +16,9 @@ class CreditCalc:
 
         try:
             self.fraction = (self.nominal_interest * (1 + self.nominal_interest) ** self.periods /
-                       ((1 + self.nominal_interest) ** self.periods - 1))
+                             ((1 + self.nominal_interest) ** self.periods - 1))
         except ZeroDivisionError:
             self.fraction = 0
-
 
     def annuity(self):
         if self.payment == 0.0:
@@ -32,16 +31,15 @@ class CreditCalc:
             else:
                 self.periods = math.ceil(self.principal / self.payment)
         elif self.principal == 0:
-            self.principal = round((self.payment / self.fraction))
+            self.principal = int(self.payment // self.fraction)
 
-
-    def diff(self, months):
+    def diff(self, period_months):
         self.payment = math.ceil((self.principal / self.periods + self.nominal_interest *
-                        (self.principal - (self.principal * (months - 1) / self.periods))))
+                                  (self.principal - (self.principal * (period_months - 1) / self.periods))))
 
 
-def zero_count(*args):
-    z_count = sum(1 for x in args if x == 0)
+def zero_count(*mth):
+    z_count = sum(1 for x in mth if x == 0)
     if z_count > 1:
         return False
     else:
@@ -68,9 +66,6 @@ def check_arguments(type_loan, interest, principal, periods, payment):
                 raise ValueError(parameters)
     except ValueError:
         return parameters
-
-
-
 
 
 if __name__ == '__main__':
@@ -104,6 +99,10 @@ if __name__ == '__main__':
                 print(f"Your annuity payment = {guriy.payment}!")
             elif not args.principal:
                 print(f"Your annuity principal = {guriy.principal}!")
+            else:
+                years = guriy.periods // 12
+                months = math.ceil(guriy.periods % 12)
+                print(f"It will take {str(years) + ' years' if years > 0 else ''} "
+                      f"{'and ' + str(months) + ' months ' if months > 0 else ''}to repay this loan!")
 
             print(f"Overpayment = {round(guriy.payment * guriy.periods - guriy.principal)}!")
-
