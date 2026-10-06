@@ -40,7 +40,7 @@ class CreditCalc:
 
 def zero_count(*mth):
     z_count = sum(1 for x in mth if x == 0)
-    if z_count > 1:
+    if z_count != 1:
         return False
     else:
         return True
